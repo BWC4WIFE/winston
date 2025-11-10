@@ -24,12 +24,11 @@ jobs:
           xcodebuild -project winston.xcodeproj \
                      -scheme winston \
                      -configuration Release \
-                     -sdk iphoneos \
+                     -destination 'generic/platform=iOS' \
                      CODE_SIGN_IDENTITY="" \
                      CODE_SIGNING_REQUIRED=NO \
                      CODE_SIGNING_ALLOWED=NO \
                      build
-
       - name: Create .ipa from build products
         run: |
           mkdir -p $RUNNER_TEMP/Payload
