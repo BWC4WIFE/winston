@@ -1,8 +1,8 @@
 name: Build and Package .ipa From Grok 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
+ # push:
+  #  branches: [ main ]
 
 jobs:
   build-ipa:
