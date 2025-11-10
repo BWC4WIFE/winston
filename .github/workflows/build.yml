@@ -14,7 +14,8 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
 
       - name: Install iOS 18.1 Simulator Runtime
-        run: curl -L https://devimages-cdn.apple.com/downloads/Xcode_16.1/Xcode_16.1.app/Contents/Resources/Runtimes/iOS%2018.1.simruntime.dmg -o /tmp/ios18.1.dmg && hdiutil attach /tmp/ios18.1.dmg -mountpoint /tmp/ios18.1 && sudo cp -R /tmp/ios18.1/iOS\ 18.1.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/ && hdiutil detach /tmp/ios18.1 && rm /tmp/ios18.1.dmg
+        run: |
+          sudo xcversion simulators --install="iOS 18.1"
 
       - name: Resolve SPM dependencies
         run: xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
