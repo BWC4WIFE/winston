@@ -13,9 +13,9 @@ jobs:
       - name: Select latest Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
 
-      - name: Install iOS 18.1 Simulator Runtime
+      - name: Install additional simulators
         run: |
-          sudo xcversion simulators --install="iOS 18.1"
+          sudo xcrun simctl runtime add "https://devimages-cdn.apple.com/downloads/xcode/simulators/com.apple.pkg.iPhoneSimulatorSDK18_1-18.1.1.1.1720637962.dmg"
 
       - name: Resolve SPM dependencies
         run: xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
