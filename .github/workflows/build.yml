@@ -1,12 +1,11 @@
-name: Build and Package .ipa
+name: Build and Package .ipa From Grok 
 on:
   workflow_dispatch:
-  #push:
-  #  branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   build-ipa:
-   # Use the latest available macOS runner
     runs-on: macos-latest
     steps:
       - name: Checkout repository code
@@ -15,18 +14,17 @@ jobs:
       - name: Select latest Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
 
-      - name: Install iOS 18.1 Simulator Runtime
-        run: xcodebuild -downloadPlatform iOS -version 18.1
+      - name: Install iOS 18.1 Simulator Runtime (fast mirror)
+        run: |
+          curl -L -o iOS18.1.simruntime.zip "https://github.com/actions/runner-images/raw/main/images/macos/macos-15-Readme/Assets/iOS_18.1.simruntime.zip"
+          unzip -o iOS18.1.simruntime.zip -d "/Library/Developer/CoreSimulator/Profiles/Runtimes/"
+          rm iOS18.1.simruntime.zip
 
-     # - name: Install iOS 18.1 Simulator Runtime
-     #   run: |
-     #     curl -L -o iOS18.1.dmg "https://devimages-cdn.apple.com/downloads/Xcode_16/Xcode_16.app/Contents/Resources/Runtimes/iOS 18.1.simruntime.dmg"
-     #     hdiutil attach iOS18.1.dmg
-     #     cp -R "/Volumes/iOS 18.1 simruntime/iOS 18.1.simruntime" "/Library/Developer/CoreSimulator/Profiles/Runtimes/"
-     #     hdiutil detach "/Volumes/iOS 18.1 simruntime"
-
-      - name: Resolve SPM dependencies
-        run: xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
+      - name: Update SPM dependencies (fix Disk + add Confetti)
+        run: |
+          sed -i '' 's|saoudrizwan/Disk.git.*|saoudrizwan/Disk.git @ 0.7.0"|g' winston.xcodeproj/project.pbxproj
+          echo '        package = PackageDependency.product(name: "ConfettiSwiftUI", package: "ConfettiSwiftUI"),' >> winston.xcodeproj/project.pbxproj
+          xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
 
       - name: Build Archive
         run: |
@@ -47,7 +45,6 @@ jobs:
           zip -r winston.ipa ./Payload
 
       - name: Upload .ipa Artifact
-      # This action uploads the generated .ipa as a workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: winston-ipa
