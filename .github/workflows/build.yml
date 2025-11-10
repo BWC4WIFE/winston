@@ -1,8 +1,6 @@
-name: Build and Package .ipa From Grok 
+name: Build and Package .ipa
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 jobs:
   build-ipa:
@@ -14,16 +12,13 @@ jobs:
       - name: Select latest Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
 
-      #- name: Install iOS 18.1 Simulator Runtime (fast mirror)
-      #  run: |
-      #    curl -L -o iOS18.1.simruntime.zip "https://github.com/actions/runner-images/raw/main/images/macos/macos-15-Readme/Assets/iOS_18.1.simruntime.zip"
-      #    unzip -o iOS18.1.simruntime.zip -d "/Library/Developer/CoreSimulator/Profiles/Runtimes/"
-      #    rm iOS18.1.simruntime.zip
       - name: Download and install iOS 18.1 Simulator Runtime
         run: sudo xcodebuild -downloadPlatform iOS -version 18.1
-        
-      - name: Resolve SPM dependencies
-        run: xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
+
+      - name: Resolve & Update SPM dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
+          xcodebuild -updatePackageDependencies -project winston.xcodeproj -scheme winston || true
 
       - name: Build Archive
         run: |
