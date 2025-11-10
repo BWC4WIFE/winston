@@ -19,19 +19,19 @@ jobs:
       - name: Resolve SPM dependencies
         run: xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
 
-           - name: Build Archive
+      - name: Build Archive
         run: |
           xcodebuild -project winston.xcodeproj \
-                     -scheme winston \
-                     -configuration Release \
-                     -destination 'generic/platform=iOS' \
-                     -archivePath $RUNNER_TEMP/winston.xcarchive \
-                     -derivedDataPath $RUNNER_TEMP/build \
-                     CODE_SIGN_IDENTITY="" \
-                     CODE_SIGNING_REQUIRED=NO \
-                     CODE_SIGNING_ALLOWED=NO \
-                     OTHER_SWIFT_FLAGS="-no-verify-emitted-module-interface" \
-                     archive
+               -scheme winston \
+               -configuration Release \
+               -destination 'generic/platform=iOS' \
+               -archivePath $RUNNER_TEMP/winston.xcarchive \
+               -derivedDataPath $RUNNER_TEMP/build \
+               CODE_SIGN_IDENTITY="" \
+               CODE_SIGNING_REQUIRED=NO \
+               CODE_SIGNING_ALLOWED=NO \
+               OTHER_SWIFT_FLAGS="-no-verify-emitted-module-interface" \
+               archive
                     
       - name: Create .ipa file
         run: |
