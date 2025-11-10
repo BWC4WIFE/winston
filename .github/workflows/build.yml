@@ -13,24 +13,19 @@ jobs:
       - name: Select latest Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
 
-
-
-# - name: Install iOS 18.1 Simulator Runtime
-     #   run: |
-     #     curl -L -o iOS18.1.simruntime.dmg "https://devimages-cdn.apple.com/downloads/Xcode_16.1/Xcode_16.1.app/Contents/Resources/Runtimes/iOS%2018.1.simruntime.dmg"
-     #     hdiutil attach iOS18.1.simruntime.dmg
-     #     sudo cp -R "/Volumes/iOS 18.1 simruntime/iOS 18.1.simruntime" /Library/Developer/CoreSimulator/Profiles/Runtimes/
-     #     hdiutil detach "/Volumes/iOS 18.1 simruntime"
-     #     rm iOS18.1.simruntime.dmg
-
-      
-      
-      - name: Install iOS Simulator
+      - name: Install iOS Platform and Simulator
         uses: apple-actions/install-simulator@v1
         with:
           version: '18.1'
-      #- name: Install iOS 18.1 Simulator Runtime
-      #  run: curl -L -o /tmp/iOS18.1.dmg "https://devimages-cdn.apple.com/downloads/xcode/simulators/iOS_18.1_Simulator_Runtime.dmg" && hdiutil attach /tmp/iOS18.1.dmg -mountpoint /tmp/ios18.1 && sudo cp -R "/tmp/ios18.1/iOS 18.1.simruntime" /Library/Developer/CoreSimulator/Profiles/Runtimes/ && hdiutil detach /tmp/ios18.1 && rm /tmp/iOS18.1.dmg
+
+      - name: Install iOS Device Support
+        run: |
+          # Install iOS device platform if needed
+          sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          sudo xcodebuild -runFirstLaunch
+
+      - name: Verify Available Platforms
+        run: xcodebuild -showdestinations -scheme winston -project winston.xcodeproj
 
       - name: Resolve SPM dependencies
         run: xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
