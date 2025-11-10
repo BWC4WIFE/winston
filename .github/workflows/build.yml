@@ -22,11 +22,8 @@ jobs:
       - name: Download and install iOS 18.1 Simulator Runtime
         run: sudo xcodebuild -downloadPlatform iOS -version 18.1
         
-      - name: Update SPM dependencies (fix Disk + add Confetti)
-        run: |
-          sed -i '' 's|saoudrizwan/Disk.git.*|saoudrizwan/Disk.git @ 0.7.0"|g' winston.xcodeproj/project.pbxproj
-          echo '        package = PackageDependency.product(name: "ConfettiSwiftUI", package: "ConfettiSwiftUI"),' >> winston.xcodeproj/project.pbxproj
-          xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
+      - name: Resolve SPM dependencies
+        run: xcodebuild -resolvePackageDependencies -project winston.xcodeproj -scheme winston
 
       - name: Build Archive
         run: |
