@@ -15,7 +15,7 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           # This will select the latest non-beta Xcode, avoiding the Xcode 16 issue
-          xcode-version: '16.0.0'
+          xcode-version: '26'
 
       - name: Checkout repository code
         uses: actions/checkout@v4
