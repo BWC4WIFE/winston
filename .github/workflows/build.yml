@@ -1,8 +1,8 @@
 name: Build and Package .ipa
 
 on:
-  push:
-    branches: [ main ] # It's good practice to specify branches
+ # push:
+ #   branches: [ main ] # It's good practice to specify branches
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
