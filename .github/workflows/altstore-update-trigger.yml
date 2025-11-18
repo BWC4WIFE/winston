@@ -1,6 +1,6 @@
 name: Trigger Release Action
 
-on:
+#on:
   release:
     types:
       - published
